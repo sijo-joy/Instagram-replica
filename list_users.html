@@ -1,0 +1,15 @@
+<html>
+   <head>
+       <meta charset="utf-8"/>
+       <title>User login/logout</title>
+    </head>
+    <body>
+    	{% if logged_user %}
+            {% for user in users_list %}
+                    {{user}}<br>
+            {% endfor %}
+
+        {% endif %}
+
+	</body>
+</html>

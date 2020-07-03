@@ -1,0 +1,44 @@
+<html>
+   <head>
+       <meta charset="utf-8"/>
+       <title>User login/logout</title>
+    </head>
+    <body>
+    	{% if logged_user %}
+            <h2>{{profile_user_obj.name}}</h2><br>
+            {% if logged_user != profile_user_obj %}
+                {% if is_following %}
+                    <form method="post" action="/user_profile?user_key={{user_key}}">
+                        <input type="submit" value="Unfollow" name="button"/>
+                    </form>
+                {% else %}
+                    <form method="post" action="/user_profile?user_key={{user_key}}">
+                        <input type="submit" value="Follow" name="button"/>
+                    </form>
+                {% endif %}
+            {% endif %}
+           <p> &nbsp;&nbsp;&nbsp;&nbsp; {{len_posts}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{len_followers}}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{len_following}} </p>
+
+            <b><p> Posts  &nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='/list_users?user_key={{user_key}}&view=followers'>Followers</a>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href='/list_users?user_key={{user_key}}&view=following'>Following</a> </p></b>
+            {% for post in posts %}
+                <img src="/download?blob_key={{post.key.urlsafe()}}"  height="350" width="550">
+                <br/>
+                Caption: {{post.caption}}
+                </br>
+                {% for comment in comment_dictonary.get(post.key) %}
+                    {% if loop.index <=5 or show_all_key == post.key %}
+                        {{comment.user_key}}: {{comment.comment}}<br>
+                    {% endif %}
+                    {% if loop.index == 6 and show_all_key != post.key %}
+                        <a href='/user_profile?user_key={{user_key}}&show_all_key={{post.key.urlsafe()}}'>expand</a>
+                        {{break}}
+                    {% endif %}
+                {% endfor %}
+                <form method="post" action="/user_profile?user_key={{user_key}}&post={{post.key.urlsafe()}}">
+                        <input type="text" name="comment" maxlength="200"/>
+                        <input type="submit" value="comment" name="button"/>
+                </form>
+            {% endfor %}
+        {% endif %}
+    </body>
+</html>

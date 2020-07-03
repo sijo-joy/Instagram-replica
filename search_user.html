@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<meta charset="utf-8"/>
+	</head>
+	<body>
+	{% if current_user %}
+	<b>Search</b><br/></br>
+
+			<form method="post" action="/search_user">
+				Name:<input type="text" name="name"/>
+				<br/>
+				<input type="submit" value="Search" name="button"/>
+			</form>
+			<br/>
+
+			{% for user in users %}<div class="row">
+				<b><a href="/user_profile?user_key={{user.key.urlsafe()}}">{{ user.name }}</a></b>
+				</div>
+			{% endfor %}
+	{% endif %}
+
+	</body>
+</html>
